@@ -3,6 +3,7 @@
 import { CardAmphie } from "@/components/custom/CardAmphi"
 import { ChartTemperatureHumidity } from "@/components/custom/ChartTemperatureH"
 import { NavBar } from "@/components/custom/NavBar"
+import { OptionMenuHistory } from "@/components/custom/OptionMenuHistory"
 import { SideNav } from "@/components/custom/SideNav"
 import { IAmphieData } from "@/utils/db_types"
 import { useEffect, useState } from "react"
@@ -25,13 +26,15 @@ export default function AmphiClass() {
             }
             //@ts-ignore
             setAmphie_data(JSON.parse(localStorage.getItem("latest_amphie")))
+
+            socket.emit("fetch_amphie_data")
+
         })
         if (localStorage.getItem("latest_amphie")) {
             //@ts-ignore
             setAmphie_data(JSON.parse(localStorage.getItem("latest_amphie")))
         }
     }, [])
-
 
 
 
@@ -46,7 +49,10 @@ export default function AmphiClass() {
 
                     <CardAmphie {...amphi_data} />
 
-                    <ChartTemperatureHumidity />
+                    <div className="mt-10 ">
+                        <OptionMenuHistory socket={socket} />
+                    </div>
+                    <ChartTemperatureHumidity socket={socket} />
                 </div>
             </div>
         </main>

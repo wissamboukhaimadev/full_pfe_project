@@ -3,13 +3,18 @@ import { Request, Response } from "express"
 import { IAmphieData } from "../utils/types/body_data_type"
 import { validate_amphie_data } from "../utils/validation/type_validator"
 import { io } from "../server/socket"
+import { getDataForDate } from "../utils/functions"
+import { Socket } from "socket.io"
+import { TDate } from "../utils/types/chart_type"
 
 
 const prisma = new PrismaClient()
 
 
 export const getAmphi_data = async (req: Request, res: Response) => {
-    const amphie_data: IAmphieData[] = await prisma.amphie.findMany()
+    const data: TDate = req.body
+    const amphie_data = await getDataForDate(data)
+
     res.send(amphie_data)
 }
 

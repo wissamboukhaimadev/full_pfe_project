@@ -1,3 +1,4 @@
+import { IAmphieData } from '@/utils/db_types';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -9,7 +10,9 @@ import {
     Filler,
     Legend,
 } from 'chart.js';
+import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import { Socket } from 'socket.io-client';
 
 
 ChartJS.register(
@@ -42,38 +45,61 @@ const options = {
         },
     },
 };
-const data = {
-    labels,
-    datasets: [
-        {
-            fill: false,
-            label: 'Temperature',
-            data: labels.map((item, index) => array_numbers1[index]),
-            borderColor: 'rgba(189, 255, 0, 0.8)',
-            backgroundColor: 'rgba(189, 255, 0, 0.8)',
-            yAxisID: 'y',
-        },
-        {
-            fill: false,
-            label: 'Humidity',
-            data: labels.map((item, index) => array_numbers2[index]),
-            borderColor: 'rgba(16, 244, 137, 0.8)',
-            backgroundColor: 'rgba(16, 244, 137, 0.8)',
-            yAxisID: 'y',
-        },
-        {
-            fill: false,
-            label: 'CO2',
-            data: labels.map((item, index) => array_numbers3[index]),
-            borderColor: 'rgba(88, 103, 96, 0.8)',
-            backgroundColor: 'rgba(88, 103, 96, 0.8)',
-            yAxisID: 'y',
-        },
 
-    ],
-};
 
-export function ChartTemperatureHumidity() {
+type TsocketType = {
+    socket: Socket
+}
+
+export function ChartTemperatureHumidity({ socket }: TsocketType) {
+
+    const [chartValues, setChartValues] = useState<any>()
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                fill: false,
+                label: 'Temperature',
+                data: labels.map((item, index) => {
+
+                    return array_numbers1[index]
+
+                }),
+                borderColor: 'rgba(189, 255, 0, 0.8)',
+                backgroundColor: 'rgba(189, 255, 0, 0.8)',
+                yAxisID: 'y',
+            },
+            // {
+            //     fill: false,
+            //     label: 'Humidity',
+            //     data: labels.map((item, index) => array_numbers2[index]),
+            //     borderColor: 'rgba(16, 244, 137, 0.8)',
+            //     backgroundColor: 'rgba(16, 244, 137, 0.8)',
+            //     yAxisID: 'y',
+            // },
+            // {
+            //     fill: false,
+            //     label: 'CO2',
+            //     data: labels.map((item, index) => array_numbers3[index]),
+            //     borderColor: 'rgba(88, 103, 96, 0.8)',
+            //     backgroundColor: 'rgba(88, 103, 96, 0.8)',
+            //     yAxisID: 'y',
+            // },
+
+        ],
+    };
+
+
+    useEffect(() => {
+        socket.on("amphie_chart_data_update", (data: IAmphieData[]) => {
+            console.log("received")
+            console.log(data)
+            setChartValues(data)
+            console.log(chartValues)
+        })
+    }, [])
+
     return (
         <div className="my-10 w-full ">
             <Line options={options} data={data} />
