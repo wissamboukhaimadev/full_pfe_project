@@ -1,13 +1,15 @@
 "use client"
+import { useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client"
 
 import { CardsFirstFloor } from "@/components/custom/CardsFirstFloor";
-import { ChartsData } from "@/components/custom/ChartsData";
+import { ChartStage1 } from "@/components/custom/versions/charts/ChartStage1";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
 import { IStageData } from "@/utils/db_types";
-import { useEffect, useState } from "react";
+import { TChartLabels } from "@/utils/types_app";
+import { OptionMenuHistoryStage1 } from "@/components/custom/versions/select_date/OptionMenuStage1";
 
-import io, { Socket } from "socket.io-client"
 
 
 const socket: Socket = io("ws://localhost:4000/")
@@ -15,6 +17,8 @@ const socket: Socket = io("ws://localhost:4000/")
 export default function GEDepartment() {
 
     const [stage1_data, setStage1_data] = useState<IStageData>({})
+    const [chartLabel, setChartLabel] = useState<TChartLabels>("daily")
+
 
     useEffect(() => {
 
@@ -42,8 +46,11 @@ export default function GEDepartment() {
 
 
                     <CardsFirstFloor {...stage1_data} />
+                    <div className="mt-10 ">
+                        <OptionMenuHistoryStage1 socket={socket} setChartLabel={setChartLabel} />
+                    </div>
 
-                    <ChartsData />
+                    <ChartStage1 socket={socket} chartLabel={chartLabel} />
                 </div>
             </div>
         </main>

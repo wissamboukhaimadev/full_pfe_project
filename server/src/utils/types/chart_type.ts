@@ -16,3 +16,5 @@ export type TDate = {
     month: number,
     day: number
 }
+
+export type TEvent = "amphie" | "stage1" | "stage2" | "stage3"

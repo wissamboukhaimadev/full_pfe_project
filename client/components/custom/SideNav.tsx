@@ -19,7 +19,7 @@ export function SideNav() {
     }, [currentIcon])
 
     return (
-        <div className="fixed px-3 py-10 mx-1 flex flex-col bg-purple-500 justify-center items-center rounded-full transition-all shadow-xl ">
+        <div className=" fixed px-3 py-10 mx-1 flex flex-col bg-purple-500 justify-center items-center rounded-full transition-all shadow-xl ">
 
             <Link className="mb-5" href="/" onClick={() => setCurrentIcon(0)}>
                 <div className={`rounded-full ${currentIcon == 0 && "bg-emerald-400  "} p-2 h-10 pb-10 `}>

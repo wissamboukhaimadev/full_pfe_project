@@ -1,10 +1,12 @@
 "use client"
 
 import { CardsSecondFloor } from "@/components/custom/CardsSecondFloor";
-import { ChartsData } from "@/components/custom/ChartsData";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
+import { ChartStage2 } from "@/components/custom/versions/charts/ChartStage2";
+import { OptionMenuHistoryStage2 } from "@/components/custom/versions/select_date/OptionMenuStage2";
 import { IStageData } from "@/utils/db_types";
+import { TChartLabels } from "@/utils/types_app";
 import { useEffect, useState } from "react";
 
 import io from "socket.io-client"
@@ -15,6 +17,8 @@ const socket = io("ws://localhost:4000")
 export default function SecondFloor() {
 
     const [stage2_data, setStage2_data] = useState<IStageData>({})
+    const [chartLabel, setChartLabel] = useState<TChartLabels>("daily")
+
 
     useEffect(() => {
 
@@ -42,7 +46,11 @@ export default function SecondFloor() {
 
                     <CardsSecondFloor {...stage2_data} />
 
-                    <ChartsData />
+                    <div className="mt-10 ">
+                        <OptionMenuHistoryStage2 socket={socket} setChartLabel={setChartLabel} />
+                    </div>
+
+                    <ChartStage2 socket={socket} chartLabel={chartLabel} />
                 </div>
             </div>
         </main>

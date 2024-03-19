@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 import { IAmphieData } from "../utils/types/body_data_type"
 import { validate_amphie_data } from "../utils/validation/type_validator"
 import { io } from "../server/socket"
-import { getDataForDate } from "../utils/functions"
+import { getDataForDate } from "../utils/chart_filters/functions_amphie"
 import { Socket } from "socket.io"
 import { TDate } from "../utils/types/chart_type"
 

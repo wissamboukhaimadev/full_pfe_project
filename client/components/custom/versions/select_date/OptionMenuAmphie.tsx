@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 import {
     Select,
@@ -9,21 +9,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Calendar } from "../ui/calendar"
-import { Popover } from "../ui/popover"
+import { Calendar } from "../../../ui/calendar"
+import { Popover } from "../../../ui/popover"
 import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
-import { Button } from "../ui/button"
+import { Button } from "../../../ui/button"
 import { CalendarIcon } from "lucide-react"
 import { Socket } from "socket.io-client"
 
+type TChartLabels = "daily" | "monthly" | "yearly"
+
+
 type TsocketType = {
     socket: Socket
+    setChartLabel: Dispatch<SetStateAction<TChartLabels>>
 }
 
-export function OptionMenuHistory({ socket }: TsocketType) {
+export function OptionMenuHistoryAmphie({ socket, setChartLabel }: TsocketType) {
 
     const [date, setDate] = useState<Date | undefined>(new Date())
-    const [dataFilterType, setDataFilterType] = useState<string>("daily")
+    const [dataFilterType, setDataFilterType] = useState<TChartLabels>("daily")
 
     const submitDate = () => {
         if (dataFilterType && date) {
@@ -39,8 +43,10 @@ export function OptionMenuHistory({ socket }: TsocketType) {
     return (
         <>
             <div className="flex justify-evenly">
-                <Select onValueChange={(value) => {
+                <Select defaultValue="daily" onValueChange={(value: TChartLabels) => {
                     setDataFilterType(value)
+                    setChartLabel(value)
+
                 }}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Filter data by time" />

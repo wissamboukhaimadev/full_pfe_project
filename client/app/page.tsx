@@ -1,6 +1,6 @@
 "use client"
 import { CardsHome } from "@/components/custom/CardsHome";
-import { ChartsData } from "@/components/custom/ChartsData";
+// import { ChartsData } from "@/components/custom/versions/charts/ChartStage1";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
 
@@ -18,7 +18,7 @@ export default function Home() {
 
           <CardsHome />
 
-          <ChartsData />
+          {/* <ChartsData /> */}
         </div>
       </div>
     </main>

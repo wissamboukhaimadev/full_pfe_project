@@ -1,19 +1,23 @@
 "use client"
 
 import { CardsThirdFloor } from "@/components/custom/CardsThirdFloor";
-import { ChartsData } from "@/components/custom/ChartsData";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
+import { ChartStage3 } from "@/components/custom/versions/charts/ChartStage3";
+import { OptionMenuHistoryStage3 } from "@/components/custom/versions/select_date/OptionMenuStage3";
 import { IStageData } from "@/utils/db_types";
+import { TChartLabels } from "@/utils/types_app";
 import { useEffect, useState } from "react";
 
 import io, { Socket } from "socket.io-client"
 
-const socket = io("ws://localhost:4000")
+const socket: Socket = io("ws://localhost:4000")
 
 export default function ThirdFloor() {
 
     const [stage3_data, setStage3_data] = useState<IStageData>({})
+    const [chartLabel, setChartLabel] = useState<TChartLabels>("daily")
+
 
     useEffect(() => {
 
@@ -40,7 +44,11 @@ export default function ThirdFloor() {
 
                     <CardsThirdFloor {...stage3_data} />
 
-                    <ChartsData />
+                    <div className="mt-10 ">
+                        <OptionMenuHistoryStage3 socket={socket} setChartLabel={setChartLabel} />
+                    </div>
+
+                    <ChartStage3 socket={socket} chartLabel={chartLabel} />
                 </div>
             </div>
         </main>

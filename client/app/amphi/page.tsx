@@ -1,11 +1,12 @@
 "use client"
 
 import { CardAmphie } from "@/components/custom/CardAmphi"
-import { ChartTemperatureHumidity } from "@/components/custom/ChartTemperatureH"
+import { ChartAmphie } from "@/components/custom/versions/charts/ChartAmphie"
 import { NavBar } from "@/components/custom/NavBar"
-import { OptionMenuHistory } from "@/components/custom/OptionMenuHistory"
+import { OptionMenuHistoryAmphie } from "@/components/custom/versions/select_date/OptionMenuAmphie"
 import { SideNav } from "@/components/custom/SideNav"
 import { IAmphieData } from "@/utils/db_types"
+import { TChartLabels } from "@/utils/types_app"
 import { useEffect, useState } from "react"
 
 import io, { Socket } from "socket.io-client"
@@ -13,9 +14,11 @@ import io, { Socket } from "socket.io-client"
 
 const socket: Socket = io("ws://localhost:4000")
 
+
 export default function AmphiClass() {
 
     const [amphi_data, setAmphie_data] = useState<IAmphieData>({})
+    const [chartLabel, setChartLabel] = useState<TChartLabels>("daily")
 
 
     useEffect(() => {
@@ -50,9 +53,9 @@ export default function AmphiClass() {
                     <CardAmphie {...amphi_data} />
 
                     <div className="mt-10 ">
-                        <OptionMenuHistory socket={socket} />
+                        <OptionMenuHistoryAmphie socket={socket} setChartLabel={setChartLabel} />
                     </div>
-                    <ChartTemperatureHumidity socket={socket} />
+                    <ChartAmphie socket={socket} chartLabel={chartLabel} />
                 </div>
             </div>
         </main>
