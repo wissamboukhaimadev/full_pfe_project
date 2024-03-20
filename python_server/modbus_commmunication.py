@@ -1,41 +1,52 @@
-from pymodbus.client.serial import ModbusSerialClient
+from pymodbus.client import ModbusSerialClient
 import time
 import requests
 
+COM_port="COM9"
 
-url = 'http://localhost:4000/api/v1/amphie/insert'  
+amphie_url="ws://localhost:4000/api/v1/amphie/insert"
+stage1_url="ws://localhost:4000/api/v1/stage1/insert"
 
-# Créer un client Modbus RTU
-client = ModbusSerialClient(method='rtu', port='COM7', baudrate=9600, bytesize=8, parity='N')
+slave = ModbusSerialClient(method='rtu', port=COM_port, baudrate=9600, bytesize=8, parity='N')
 
-# Se connecter au périphérique Modbus
-client.connect()
-
-while(1):
-    # Lire les valeurs des registres
-    response = client.read_holding_registers(address=0, count=2, slave=1)
-
-    # Vérifier si la lecture a réussi
+def PM3255(address):
+    response = slave.read_holding_registers(address, count=2, slave=2)
     if not response.isError():
-        print("Valeurs lues:", response.registers)
-        print(f'response ${response}')
-        H = response.registers[0] / 100
-        print("Humidity :", H , " %")
-        T = response.registers[1] / 100
-        print("Temperature :", T , " *C")
-
-        data={
-            "temperature":str(T),
-            "humidity":str(H),
-            "co2_gaz":str(99)
-        }
-        response = requests.post(url, json=data)
+        V = (response.registers[0] << 16 | response.registers[1]) / (2**16)
+        return V
     else:
-        print("Erreur de lecture:", response)
+        V = 0
+        return V
+while True:
+    slave.connect()
+    response = slave.read_holding_registers(0, count=2, slave=1)
+    try:
+        if not response.isError():
 
-    
+            amphie_data={
+                "temperature":str(response.registers[1] / 100),
+                "co2_gaz":str(43),
+                "humidity":str(response.registers[0] / 100)
+            }
+            
 
-    # Fermer la connexion
-    time.sleep(10)
+            stage1_data={
+                "current":str(PM3255(0x0BC1)),
+                "tension":str(PM3255(0x0BDB)),
+                "power":str(PM3255(0x0BF3)),
+                "energy":str(54)
+            }
 
-client.close()
+            requests.post(amphie_url,amphie_data)
+            requests.post(stage1_url,stage1_url)
+            print(f"Humidity : {response.registers[0] / 100} %")
+            print(f"Temperature : {response.registers[1] / 100} *C")
+            print(f"la valeur de Tension est : {PM3255(0x0BDB):.2f} V")
+            print(f"la valeur de Courant est : {PM3255(0x0BC1):.2f} A")
+            print(f"la valeur de la puissance active totale est : {PM3255(0x0BF3):.2f} KW")
+            print(f"la valeur de la puissance reactive totale est : {PM3255(0x0BFB):.2f} KVAR")
+            print(f"la valeur de la puissance apparente totale est : {PM3255(0x0C03):.2f} KVA")
+    except AttributeError:
+        pass
+    slave.close()
+    time.sleep(1)
