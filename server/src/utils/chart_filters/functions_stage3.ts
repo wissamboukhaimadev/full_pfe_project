@@ -69,7 +69,7 @@ export async function getDataForDate({ year, month, day }: TDate) {
 
         })
 
-        const allHours = Array.from({ length: 23 }, (_, index) => index.toString())
+        const allHours = Array.from({ length: 24 }, (_, index) => index.toString())
 
         const result: IStage1Data[] = allHours.map(hour => {
             const averageCurrent = average_data[hour] ? average_data[hour].current / average_data_count[hour].current : 0

@@ -55,7 +55,7 @@ export function ChartStage1({ socket, chartLabel }: TsocketType) {
 
     const labels_markeup = () => {
         if (chartLabel === "daily") {
-            return Array.from({ length: 23 }, (_, index) => index.toString())
+            return Array.from({ length: 24 }, (_, index) => index.toString())
         } else if (chartLabel === "monthly") {
             return ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         } else {
