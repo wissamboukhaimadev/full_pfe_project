@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { startOfDay } from "date-fns"
+import { format, startOfDay } from "date-fns"
 import { TDate } from "../types/chart_type";
 import { IStage1Data } from "../types/body_data_type";
 
@@ -113,7 +113,8 @@ export async function getDataForMonth({ year, month, day }: TDate) {
 
         data.forEach(({ createdAt, current, tension, power, energy }) => {
             let date = new Date(createdAt)
-            let day_week = date.getDay().toString()
+            let day_week = format(date, "EEEE")
+
 
             if (!average_data[day_week]) {
                 average_data[day_week] = {
@@ -143,22 +144,25 @@ export async function getDataForMonth({ year, month, day }: TDate) {
 
         })
 
-        const result: IStage1Data[] = Object.keys(average_data).map(day_week => {
-            const averageCurrent = (average_data[day_week].current / average_data_count[day_week].current).toString()
-            const averageTension = (average_data[day_week].tension / average_data_count[day_week].tension).toString()
-            const averagePower = (average_data[day_week].power / average_data_count[day_week].power).toString()
-            const averageEnergy = (average_data[day_week].energy / average_data_count[day_week].energy).toString()
+        const allDaysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+        const result: IStage1Data[] = allDaysOfWeek.map(day_week => {
+            const averageCurrent = average_data[day_week] ? average_data[day_week].current / average_data_count[day_week].current : 0
+            const averageTension = average_data[day_week] ? average_data[day_week].tension / average_data_count[day_week].tension : 0
+            const averagePower = average_data[day_week] ? average_data[day_week].power / average_data_count[day_week].power : 0
+            const averageEnergy = average_data[day_week] ? average_data[day_week].energy / average_data_count[day_week].energy : 0
             let final_result: IStage1Data = {
-                current: averageCurrent,
-                tension: averageTension,
-                power: averagePower,
-                energy: averageEnergy,
+                current: averageCurrent.toString(),
+                tension: averageTension.toString(),
+                power: averagePower.toString(),
+                energy: averageEnergy.toString(),
 
             }
             return final_result
         })
 
-        return data;
+        return result;
     } catch (error) {
         console.error(error);
         throw new Error('Error retrieving data for the date.');
@@ -184,7 +188,7 @@ export async function getDataForYear({ year, month, day }: TDate) {
         });
         data.forEach(({ createdAt, current, tension, power, energy }) => {
             let date = new Date(createdAt)
-            let month = date.getMonth().toString()
+            let month = format(date, "MMMM")
 
             if (!average_data[month]) {
                 average_data[month] = {
@@ -214,22 +218,24 @@ export async function getDataForYear({ year, month, day }: TDate) {
 
         })
 
-        const result: IStage1Data[] = Object.keys(average_data).map(month => {
-            const averageCurrent = (average_data[month].current / average_data_count[month].current).toString()
-            const averageTension = (average_data[month].tension / average_data_count[month].tension).toString()
-            const averagePower = (average_data[month].power / average_data_count[month].power).toString()
-            const averageEnergy = (average_data[month].energy / average_data_count[month].energy).toString()
+        const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
+
+        const result: IStage1Data[] = allMonths.map(month => {
+            const averageCurrent = average_data[month] ? average_data[month].current / average_data_count[month].current : 0
+            const averageTension = average_data[month] ? average_data[month].tension / average_data_count[month].tension : 0
+            const averagePower = average_data[month] ? average_data[month].power / average_data_count[month].power : 0
+            const averageEnergy = average_data[month] ? average_data[month].energy / average_data_count[month].energy : 0
             let final_result: IStage1Data = {
-                current: averageCurrent,
-                tension: averageTension,
-                power: averagePower,
-                energy: averageEnergy,
+                current: averageCurrent.toString(),
+                tension: averageTension.toString(),
+                power: averagePower.toString(),
+                energy: averageEnergy.toString(),
 
             }
             return final_result
         })
 
-        return data;
+        return result;
     } catch (error) {
         console.error(error);
         throw new Error('Error retrieving data for the date.');

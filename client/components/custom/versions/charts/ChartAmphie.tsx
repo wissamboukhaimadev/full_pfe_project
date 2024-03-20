@@ -114,13 +114,11 @@ export function ChartAmphie({ socket, chartLabel }: TsocketType) {
 
     useEffect(() => {
         socket.on("amphie_chart_data_update", (data: IAmphieData[]) => {
-            console.log("received")
-            setChartValues(prevState => [...data])
+            setChartValues(_ => [...data])
 
         })
     }, [])
 
-    console.log(chartValues)
 
     return (
         <div className="my-10 w-full ">

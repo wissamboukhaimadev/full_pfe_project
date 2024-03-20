@@ -55,7 +55,7 @@ export function ChartStage3({ socket, chartLabel }: TsocketType) {
 
     const labels_markeup = () => {
         if (chartLabel === "daily") {
-            return ["00:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+            return Array.from({ length: 23 }, (_, index) => index.toString())
         } else if (chartLabel === "monthly") {
             return ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         } else {
@@ -90,13 +90,11 @@ export function ChartStage3({ socket, chartLabel }: TsocketType) {
 
     useEffect(() => {
         socket.on("stage3_chart_data_update", (data: IStageData[]) => {
-            console.log("received")
-            setChartValues(prevState => [...data])
+            setChartValues(_ => [...data])
 
         })
     }, [])
 
-    console.log(chartValues)
 
     return (
         <div className="my-10 w-full ">

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import {
     Select,
@@ -31,7 +31,6 @@ export function OptionMenuHistoryStage2({ socket, setChartLabel }: TsocketType) 
 
     const submitDate = () => {
         if (dataFilterType && date) {
-            console.log("sending ....")
             socket.emit("stage2_chart_data", {
                 currentDate: date,
                 settings: dataFilterType

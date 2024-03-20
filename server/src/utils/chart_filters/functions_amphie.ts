@@ -88,7 +88,7 @@ export async function getDataForDate({ year, month, day }: TDate) {
     }
 }
 
-export async function getDataForMonth({ year, month, day }: TDate) {
+export async function getDataForMonth({ year, month }: TDate) {
     try {
         const startDate = startOfDay(new Date(year, month - 1, 0));
         const endDate = startOfDay(new Date(year, month, 0));
@@ -156,7 +156,7 @@ export async function getDataForMonth({ year, month, day }: TDate) {
         await prisma.$disconnect();
     }
 }
-export async function getDataForYear({ year, month, day }: TDate) {
+export async function getDataForYear({ year }: TDate) {
 
     try {
         const startDate = startOfDay(new Date(year, 0, 0));
@@ -174,8 +174,7 @@ export async function getDataForYear({ year, month, day }: TDate) {
         });
         data.forEach(({ createdAt, temperature, co2_gaz, humidity }) => {
             let date = new Date(createdAt)
-            let month = date.getMonth().toString()
-
+            let month = format(date, "MMMM")
             if (!average_data[month]) {
                 average_data[month] = {
                     co2_gaz: 0,
@@ -200,20 +199,22 @@ export async function getDataForYear({ year, month, day }: TDate) {
 
         })
 
-        const result: IAmphieData[] = Object.keys(average_data).map(month => {
-            const averageTemperature = (average_data[month].temperature / average_data_count[month].temperature).toString()
-            const averageHumidity = (average_data[month].humidity / average_data_count[month].humidity).toString()
-            const averageCo2gaz = (average_data[month].co2_gaz / average_data_count[month].co2_gaz).toString()
+        const allMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
+
+        const result: IAmphieData[] = allMonths.map(month => {
+            const averageTemperature = average_data[month] ? average_data[month].temperature / average_data_count[month].temperature : 0
+            const averageHumidity = average_data[month] ? average_data[month].humidity / average_data_count[month].humidity : 0
+            const averageCo2gaz = average_data[month] ? average_data[month].co2_gaz / average_data_count[month].co2_gaz : 0
             let final_result: IAmphieData = {
-                temperature: averageTemperature,
-                humidity: averageHumidity,
-                co2_gaz: averageCo2gaz,
+                temperature: averageTemperature.toString(),
+                humidity: averageHumidity.toString(),
+                co2_gaz: averageCo2gaz.toString(),
 
             }
             return final_result
         })
 
-        return data;
+        return result;
     } catch (error) {
         console.error(error);
         throw new Error('Error retrieving data for the date.');

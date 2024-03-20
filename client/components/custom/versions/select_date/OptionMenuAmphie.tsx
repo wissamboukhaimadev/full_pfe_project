@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import {
     Select,
@@ -31,7 +31,6 @@ export function OptionMenuHistoryAmphie({ socket, setChartLabel }: TsocketType) 
 
     const submitDate = () => {
         if (dataFilterType && date) {
-            console.log("sending ....")
             socket.emit("amphie_chart_data", {
                 currentDate: date,
                 settings: dataFilterType
