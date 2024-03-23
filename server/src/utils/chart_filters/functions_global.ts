@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { format, startOfDay } from "date-fns"
-import { TDate, TEvent } from "../types/chart_type";
-import { IAmphieData, IStage1Data } from "../types/body_data_type";
+import { TDate } from "../types/chart_type";
+import { IStage1Data } from "../types/body_data_type";
 
 
 const prisma = new PrismaClient()
@@ -12,11 +12,10 @@ interface IStage1DataNumbers {
     puissance_active: number,
     puissance_reactive: number,
     puissance_apparente: number,
-    energy: number,
+    energy: number
     createdAt?: Date
 
 }
-
 
 type TDayMonthYear = {
     [time: string]: IStage1DataNumbers,
@@ -30,7 +29,7 @@ export async function getDataForDate({ year, month, day }: TDate) {
         let average_data: TDayMonthYear = {}
         let average_data_count: TDayMonthYear = {}
 
-        const data = await prisma.stage3.findMany({
+        const data = await prisma.globalPM.findMany({
             where: {
                 createdAt: {
                     gte: startDate,
@@ -110,6 +109,7 @@ export async function getDataForDate({ year, month, day }: TDate) {
 }
 
 export async function getDataForMonth({ year, month }: TDate) {
+
     try {
         const startDate = startOfDay(new Date(year, month - 1, 0));
         const endDate = startOfDay(new Date(year, month, 0));
@@ -117,7 +117,7 @@ export async function getDataForMonth({ year, month }: TDate) {
         let average_data_count: TDayMonthYear = {}
 
 
-        const data = await prisma.stage3.findMany({
+        const data = await prisma.globalPM.findMany({
             where: {
                 createdAt: {
                     gte: startDate,
@@ -204,7 +204,7 @@ export async function getDataForYear({ year }: TDate) {
         let average_data: TDayMonthYear = {}
         let average_data_count: TDayMonthYear = {}
 
-        const data = await prisma.stage3.findMany({
+        const data = await prisma.globalPM.findMany({
             where: {
                 createdAt: {
                     gte: startDate,

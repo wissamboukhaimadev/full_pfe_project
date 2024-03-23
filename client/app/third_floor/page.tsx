@@ -1,6 +1,6 @@
 "use client"
 
-import { CardsThirdFloor } from "@/components/custom/CardsThirdFloor";
+import { CardsThirdFloor } from "@/components/custom/versions/cards/CardsThirdFloor";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
 import { ChartStage3 } from "@/components/custom/versions/charts/ChartStage3";
@@ -31,6 +31,9 @@ export default function ThirdFloor() {
             setStage3_data(JSON.parse(localStorage.getItem("latest_stage3")))
         }
 
+        return () => {
+            socket.off("inserted_stage3_data")
+        }
     }, [])
     return (
         <main >

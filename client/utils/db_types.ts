@@ -9,7 +9,9 @@ export interface IAmphieData {
 export interface IStageData {
     current?: string,
     tension?: string,
-    power?: string,
+    puissance_active?: string,
+    puissance_reactive?: string,
+    puissance_apparente?: string,
     energy?: string
     createdAt?: Date
 

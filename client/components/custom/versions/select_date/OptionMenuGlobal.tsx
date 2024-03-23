@@ -24,15 +24,14 @@ type TsocketType = {
     setChartLabel: Dispatch<SetStateAction<TChartLabels>>
 }
 
-export function OptionMenuHistoryAmphie({ socket, setChartLabel }: TsocketType) {
+export function OptionMenuHistoryGlobal({ socket, setChartLabel }: TsocketType) {
 
     const [date, setDate] = useState<Date | undefined>(new Date())
-
     const [dataFilterType, setDataFilterType] = useState<TChartLabels>("daily")
 
     const submitDate = () => {
         if (dataFilterType && date) {
-            socket.emit("amphie_chart_data", {
+            socket.emit("global_chart_data", {
                 currentDate: date,
                 settings: dataFilterType
             })

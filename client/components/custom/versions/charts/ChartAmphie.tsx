@@ -14,6 +14,10 @@ import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Socket } from 'socket.io-client';
 
+import { Flip, toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { checkToastShow } from '@/utils/functions/showToats';
+
 
 ChartJS.register(
     CategoryScale,
@@ -111,18 +115,43 @@ export function ChartAmphie({ socket, chartLabel }: TsocketType) {
         ],
     };
 
-
     useEffect(() => {
         socket.on("amphie_chart_data_update", (data: IAmphieData[]) => {
             setChartValues(_ => [...data])
 
+            const state = data.map(item => item.temperature === "0" && item.co2_gaz === "0" && item.humidity === "0")
+            if (checkToastShow(state)) {
+                toast.error(`data is not availaible for today`, {
+                    position: "top-right",
+                    transition: Flip
+                });
+
+            } else {
+                toast.success(`data successfully fetched `, {
+                    position: "top-right",
+                    transition: Flip
+                });
+            }
+
         })
+
+        return () => {
+            socket.off("amphie_chart_data_update")
+        }
+
     }, [])
 
 
     return (
         <div className="my-10 w-full ">
             <Line options={options} data={data} />
+            <ToastContainer
+                hideProgressBar
+                pauseOnHover={false}
+                theme='dark'
+                autoClose={1000}
+                draggable
+            />
         </div>
     )
 }

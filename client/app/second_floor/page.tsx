@@ -1,6 +1,6 @@
 "use client"
 
-import { CardsSecondFloor } from "@/components/custom/CardsSecondFloor";
+import { CardsSecondFloor } from "@/components/custom/versions/cards/CardsSecondFloor";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
 import { ChartStage2 } from "@/components/custom/versions/charts/ChartStage2";
@@ -32,6 +32,10 @@ export default function SecondFloor() {
             setStage2_data(JSON.parse(localStorage.getItem("latest_stage2")))
         }
 
+
+        return () => {
+            socket.off("inserted_stage2_data")
+        }
     }, [])
 
     return (

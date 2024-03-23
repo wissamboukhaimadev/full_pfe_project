@@ -12,9 +12,13 @@ export const validate_amphie_data = (data: IAmphieData) => {
 
 
 export const validate_stage_data = (data: IStage1Data) => {
-    if ((data.current && typeof data.current === "string") && (data.tension &&
-        typeof data.tension === "string") && (data.power && typeof data.power === "string")
+    if ((data.current && typeof data.current === "string")
+        && (data.tension && typeof data.tension === "string")
+        && (data.puissance_active && typeof data.puissance_active === "string")
         && (data.energy && typeof data.energy === "string")
+        && (data.puissance_active && typeof data.puissance_active === "string")
+        && (data.puissance_reactive && typeof data.puissance_reactive === "string")
+        && (data.puissance_apparente && typeof data.puissance_apparente === "string")
     ) {
         return true;
     } else {

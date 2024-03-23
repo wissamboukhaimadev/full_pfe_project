@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Socket } from 'socket.io-client';
-import { Flip, ToastContainer, toast } from 'react-toastify';
+import { Flip, toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -53,7 +53,7 @@ type TsocketType = {
 }
 
 
-export function ChartStage3({ socket, chartLabel }: TsocketType) {
+export function ChartGlobal({ socket, chartLabel }: TsocketType) {
 
     const [chartValues, setChartValues] = useState<IStageData[]>([])
 
@@ -93,7 +93,7 @@ export function ChartStage3({ socket, chartLabel }: TsocketType) {
 
 
     useEffect(() => {
-        socket.on("stage3_chart_data_update", (data: IStageData[]) => {
+        socket.on("global_chart_data_update", (data: IStageData[]) => {
             setChartValues(_ => [...data])
             const state = data.map(item => item.current === "0" && item.tension === "0" && item.energy === "0" && item.puissance_active === "0" && item.puissance_reactive === "0" && item.puissance_apparente === "0")
             if (checkToastShow(state)) {
@@ -111,7 +111,7 @@ export function ChartStage3({ socket, chartLabel }: TsocketType) {
         })
 
         return () => {
-            socket.off("stage3_chart_data_update")
+            socket.off("global_chart_data_update")
         }
     }, [])
 

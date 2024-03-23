@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client"
 
-import { CardsFirstFloor } from "@/components/custom/CardsFirstFloor";
+import { CardsFirstFloor } from "@/components/custom/versions/cards/CardsFirstFloor";
 import { ChartStage1 } from "@/components/custom/versions/charts/ChartStage1";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
@@ -31,7 +31,9 @@ export default function GEDepartment() {
             //@ts-ignore
             setStage1_data(JSON.parse(localStorage.getItem("latest_stage1")))
         }
-
+        return () => {
+            socket.off("inserted_stage1_data")
+        }
     }, [])
 
 

@@ -1,9 +1,10 @@
 import { Droplet, Zap } from "lucide-react";
-import { Card, CardDescription, CardTitle } from "../ui/card";
-import { Progress } from "../ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Card, CardDescription, CardTitle } from "../../../ui/card";
+import { Progress } from "../../../ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../ui/dialog";
+import { IStageData } from "@/utils/db_types";
 
-export function CardsHome() {
+export function CardsSecondFloor({ current, energy, puissance_active, puissance_reactive, puissance_apparente, tension }: IStageData) {
     return (
         <div className="mx-20 grid grid-cols-2 gap-10">
             <Dialog>
@@ -16,7 +17,7 @@ export function CardsHome() {
                             <Zap className="ml-10 fill-yellow-300 " size={30} />
                         </div>
                         <CardDescription className="pt-2">
-                            <p className="text-left">31</p>
+                            <p className="text-left">{energy}</p>
                         </CardDescription>
                         <CardDescription className="pt-5">
                             <Progress value={33} indicatorColor="bg-yellow-300" forgroundColor="bg-white" className="shadow-xl " />
@@ -32,23 +33,23 @@ export function CardsHome() {
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-2 items-center gap-4">
                             <p>tension</p>
-                            <p>144</p>
+                            <p>{tension} V</p>
                         </div>
                         <div className="grid grid-cols-2 items-center gap-4">
                             <p>courent</p>
-                            <p>144</p>
+                            <p>{current} A</p>
                         </div>
                         <div className="grid grid-cols-2 items-center gap-4">
                             <p>puissance active</p>
-                            <p>144</p>
+                            <p>{puissance_active} KW</p>
                         </div>
                         <div className="grid grid-cols-2 items-center gap-4">
                             <p>puissance reactive</p>
-                            <p>144</p>
+                            <p>{puissance_reactive} KVAR</p>
                         </div>
                         <div className="grid grid-cols-2 items-center gap-4">
                             <p>puissance apparente</p>
-                            <p>144</p>
+                            <p>{puissance_apparente} KVA</p>
                         </div>
 
                     </div>

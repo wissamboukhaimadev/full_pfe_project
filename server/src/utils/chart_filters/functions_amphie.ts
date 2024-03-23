@@ -36,6 +36,7 @@ export async function getDataForDate({ year, month, day }: TDate) {
             },
         });
 
+
         data.forEach(({ createdAt, temperature, co2_gaz, humidity }) => {
             let date = new Date(createdAt)
             let hour = date.getHours().toString()
@@ -66,9 +67,6 @@ export async function getDataForDate({ year, month, day }: TDate) {
         })
 
         const allHours = Array.from({ length: 24 }, (_, index) => index.toString())
-
-        console.log(allHours)
-
 
         const result: IAmphieData[] = allHours.map(hour => {
             const averageTemperature = average_data[hour] ? average_data[hour].temperature / average_data_count[hour].temperature : 0

@@ -1,11 +1,37 @@
 "use client"
-import { CardsHome } from "@/components/custom/CardsHome";
-// import { ChartsData } from "@/components/custom/versions/charts/ChartStage1";
 import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
+import { CardsGlobal } from "@/components/custom/versions/cards/CardsGlobal";
+import { ChartGlobal } from "@/components/custom/versions/charts/ChartGlobal";
+import { OptionMenuHistoryGlobal } from "@/components/custom/versions/select_date/OptionMenuGlobal";
+import { IStageData } from "@/utils/db_types";
+import { TChartLabels } from "@/utils/types_app";
+import { useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client"
 
 
+const socket: Socket = io("ws://localhost:4000")
 export default function Home() {
+
+  const [global_data, setGlobal_data] = useState<IStageData>({})
+  const [chartLabel, setChartLabel] = useState<TChartLabels>("daily")
+
+
+  useEffect(() => {
+
+    socket.on("inserted_global_data", (data: IStageData) => {
+      localStorage.setItem("latest_stage1", JSON.stringify(data))
+      // @ts-ignore
+      setGlobal_data(JSON.parse(localStorage.getItem("latest_stage1")))
+    })
+    if (localStorage.getItem("latest_stage1")) {
+      //@ts-ignore
+      setGlobal_data(JSON.parse(localStorage.getItem("latest_stage1")))
+    }
+    return () => {
+      socket.off("inserted_global_data")
+    }
+  }, [])
   return (
     <main >
       <NavBar />
@@ -16,9 +42,12 @@ export default function Home() {
         <div className=" mx-28 mt-10 w-full" >
 
 
-          <CardsHome />
+          <CardsGlobal {...global_data} />
 
-          {/* <ChartsData /> */}
+          <div className="mt-10 ">
+            <OptionMenuHistoryGlobal socket={socket} setChartLabel={setChartLabel} />
+          </div>
+          <ChartGlobal socket={socket} chartLabel={chartLabel} />
         </div>
       </div>
     </main>

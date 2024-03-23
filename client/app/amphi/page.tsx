@@ -1,6 +1,6 @@
 "use client"
 
-import { CardAmphie } from "@/components/custom/CardAmphi"
+import { CardAmphie } from "@/components/custom/versions/cards/CardAmphi"
 import { ChartAmphie } from "@/components/custom/versions/charts/ChartAmphie"
 import { NavBar } from "@/components/custom/NavBar"
 import { OptionMenuHistoryAmphie } from "@/components/custom/versions/select_date/OptionMenuAmphie"
@@ -36,6 +36,10 @@ export default function AmphiClass() {
         if (localStorage.getItem("latest_amphie")) {
             //@ts-ignore
             setAmphie_data(JSON.parse(localStorage.getItem("latest_amphie")))
+        }
+
+        return () => {
+            socket.off("inserted_amphie_data")
         }
     }, [])
 
