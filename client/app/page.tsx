@@ -3,6 +3,7 @@ import { NavBar } from "@/components/custom/NavBar";
 import { SideNav } from "@/components/custom/SideNav";
 import { CardsGlobal } from "@/components/custom/versions/cards/CardsGlobal";
 import { ChartGlobal } from "@/components/custom/versions/charts/ChartGlobal";
+import ChartsTesting from "@/components/custom/versions/charts/ChartsTesting";
 import { OptionMenuHistoryGlobal } from "@/components/custom/versions/select_date/OptionMenuGlobal";
 import { IStageData } from "@/utils/db_types";
 import { TChartLabels } from "@/utils/types_app";
@@ -36,7 +37,7 @@ export default function Home() {
     <main >
       <NavBar />
       <div className="flex ">
-        <div className="w-20 ">
+        <div className=" pb-20">
           <SideNav />
         </div>
         <div className=" mx-28 mt-10 w-full" >
@@ -47,7 +48,8 @@ export default function Home() {
           <div className="mt-10 ">
             <OptionMenuHistoryGlobal socket={socket} setChartLabel={setChartLabel} />
           </div>
-          <ChartGlobal socket={socket} chartLabel={chartLabel} />
+          {/* <ChartGlobal socket={socket} chartLabel={chartLabel} /> */}
+          <ChartsTesting />
         </div>
       </div>
     </main>

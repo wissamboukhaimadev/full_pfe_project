@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { IStageData } from "@/utils/db_types";
 
 
+
 export function CardsFirstFloor({ tension, current, puissance_active, puissance_reactive, puissance_apparente, energy }: IStageData) {
     return (
         <div className="mx-20 grid grid-cols-2 gap-10">

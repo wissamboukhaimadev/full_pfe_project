@@ -100,7 +100,7 @@ export function ChartAmphie({ socket, chartLabel }: TsocketType) {
             },
             {
                 fill: false,
-                label: 'Humidity',
+                label: 'co2_gaz',
                 data: labels.map((_, index) => {
 
                     if (chartValues[index]) return chartValues[index].co2_gaz

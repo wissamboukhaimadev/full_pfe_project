@@ -9,7 +9,7 @@ export function NavBar() {
             <div className="flex ">
                 {naviagtion_items.map(item => (
                     <Link href={item.link} key={item.id} >
-                        <p className="font-bold pr-5">{item.text}</p>
+                        <p className="font-bold pr-5 ">{item.text}</p>
                     </Link>
                 ))}
 
